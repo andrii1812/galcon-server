@@ -6,3 +6,5 @@ script:
  - dotnet restore src/
  - dotnet publish src/ -c Release -r linux-x64
  - dotnet publish src/ -c Release -r win7-x64
+after_success:
+    "cd src/bin/Release/netcoreapp2.0/ && zip out.zip **/* && curl -T out.zip -u $FTP_USER:$FTP_PASSWORD ftp://$DEPLOY_SERVER"
