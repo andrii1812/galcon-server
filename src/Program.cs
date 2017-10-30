@@ -12,6 +12,7 @@ namespace Galcon.Server
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
+                .UseUrls("http://0.0.0.0:5050")
                 .Build();
 
             host.Run();
