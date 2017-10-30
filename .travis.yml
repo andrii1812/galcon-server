@@ -2,9 +2,7 @@ language: csharp
 mono: none
 dotnet: 2.0.0
 dist: trusty
-os:
- - linux
- - windows
 script:
  - dotnet restore src/
- - dotnet build src/
+ - dotnet publish src/ -c Release -r linux-x64
+ - dotnet publish src/ -c Release -r win7-x64
