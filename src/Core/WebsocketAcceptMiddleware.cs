@@ -4,6 +4,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace Galcon.Server.Core
 {
@@ -12,9 +13,17 @@ namespace Galcon.Server.Core
         private readonly RequestDelegate _next;
         private readonly ConnectionManager connectionManager;
         private readonly ITaskHandler handler;
+        private readonly IOptions<Configuration> options;
+        private readonly ISerializeManager serializeManager;
 
-        public WebsocketAcceptMiddleware(RequestDelegate next, ConnectionManager connectionManager, ITaskHandler handler)
+        public WebsocketAcceptMiddleware(
+            RequestDelegate next, 
+            ConnectionManager connectionManager, 
+            ITaskHandler handler, 
+            IOptions<Configuration> options)
         {
+            this.serializeManager = serializeManager;
+            this.options = options;
             this.handler = handler;
             this.connectionManager = connectionManager;
             _next = next;
@@ -31,12 +40,14 @@ namespace Galcon.Server.Core
                     var userCollection = context.Request.Query["name"];
                     if (userCollection.Count != 1)
                     {
-                        context.Response.StatusCode = 400;
+                        await context.Response.WriteAsync("User already exists");
                     }
                     else
                     {
-                        var user = userCollection[0];
-                        await connectionManager.Add(user, webSocket, handler);
+                        var userName = userCollection[0];
+                        var id = User.CreateId();
+                        var user = new User { Id = id, Name = userName };
+                        await connectionManager.Add(user, webSocket, handler, options);
                     }
                 }
                 else

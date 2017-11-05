@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GalconServer.Core
+namespace Galcon.Server.Core
 {
     public class Planet
     {

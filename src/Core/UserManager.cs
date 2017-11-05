@@ -6,11 +6,14 @@ namespace Galcon.Server.Core
     public class UserManager : IUserManager
     {
         private readonly ConnectionManager connectionManager;
+        private readonly ISerializeManager serializeManager;
 
         public UserManager(ConnectionManager connectionManager)
         {
             this.connectionManager = connectionManager;
         }
+
+        public int UserCount => connectionManager._dictionary.Keys.Count;
 
         public async Task Broadcast(string message)
         {
@@ -19,7 +22,7 @@ namespace Galcon.Server.Core
 
         public async Task SendMessage(User user, string message)
         {
-            await connectionManager.Send(user.Name, message);
+            await connectionManager.Send(user, message);
         }
     }
 }

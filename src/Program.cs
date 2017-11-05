@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace Galcon.Server
 {
@@ -7,12 +8,18 @@ namespace Galcon.Server
     {
         public static void Main(string[] args)
         {
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional:false, reloadOnChange: true);
+
+            var config = builder.Build();
+            Startup.Configuration = config;
+
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                .UseUrls("http://0.0.0.0:5050")
+                .UseUrls($"http://{config["host"]}:{config["port"]}")
                 .Build();
 
             host.Run();
