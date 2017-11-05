@@ -11,13 +11,15 @@ namespace GalconServer.App.Events
 
     public class GameOverEventArgs : EventArgs
     {
+        public int TickID { get; private set; }
         public User Winner { get; private set; }
         public string Reason { get; private set; }
 
-        public GameOverEventArgs(User winner, string reason)
+        public GameOverEventArgs(int tickID, User winner, string reason)
         {
             Winner = winner;
             Reason = reason;
+            TickID = tickID;
         }
     }
 }
