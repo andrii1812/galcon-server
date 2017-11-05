@@ -2,7 +2,7 @@
 {
     public enum SenderType
     {
-        Server = 0,
-        Client
+        Client = 0,
+        Server = 1
     }
 }
