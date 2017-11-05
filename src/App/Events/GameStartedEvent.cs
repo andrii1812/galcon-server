@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace GalconServer.App.Events
 {
     using Core;
+    using Model;
 
     public delegate void GameStartedEEventHandler(GameStartedEventArgs e);
 

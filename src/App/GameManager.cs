@@ -26,7 +26,7 @@
             _timer = new System.Timers.Timer(_tickInterval) {Enabled = true};
             _tickId = 0;
             _timer.Elapsed += OnTick;
-            Map = new Map(Player1.Id, Player2.Id, _numberOfPlanets);
+            Map = new Map {Planets = Map.GenerateMap(Player1.Id, Player2.Id, _numberOfPlanets)};
             OnGameStarted(new GameStartedEventArgs(new List<User> {Player1,Player2}, Map));
             _timer.Start();
         }

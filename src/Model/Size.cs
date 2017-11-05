@@ -1,4 +1,4 @@
-﻿namespace GalconServer.Core 
+﻿namespace GalconServer.Model 
 {
     public enum Size
     {

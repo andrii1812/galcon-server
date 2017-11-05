@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace GalconServer.Core
+﻿namespace GalconServer.Model
 {
+    using System;
+    using Core;
+
     public class Planet
     {
         public int ID { get; set; }

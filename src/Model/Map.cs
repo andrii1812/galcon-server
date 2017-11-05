@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace GalconServer.Core
+﻿namespace GalconServer.Model
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Core;
+    using Newtonsoft.Json;
+
     public class Map
     {
         private const double _partOfLargePlanets = 0.2;
@@ -15,20 +16,11 @@ namespace GalconServer.Core
 
         public static List<Planet> GenerateMap(int firstUserID, int secndUserID, int numberOfPlanets)
         {
-            List<Planet> planetList = new List<Planet>();
-            Size size;
+            var planetList = new List<Planet>();
 
             bool IsDistanceLongEnough(Planet planet, List<Planet> pList)
             {
-                foreach (Planet p in pList)
-                {
-                    double distance = GetDistanceBetweenPlanets(p, planet);
-                    if (distance < _minDistance)
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                return pList.Select(p => GetDistanceBetweenPlanets(p, planet)).All(distance => !(distance < _minDistance));
             }
 
             Planet firstUserPlanet = Planet.GenerateRandomPlanet(1, Size.Huge, firstUserID);
@@ -50,6 +42,7 @@ namespace GalconServer.Core
             int m = (int)(_partOfMediumPlanets * numberOfPlanets);
             for (int i = 3; i <= numberOfPlanets; i++)
             {
+                Size size;
                 if (l > 0)
                 {
                     size = Size.Large;
@@ -89,8 +82,8 @@ namespace GalconServer.Core
 
         public string SerializeMapUpdate()
         {
-            var PlanetsUpdate = Planets.Select(x => x.ToPlanetUpdate());
-            return JsonConvert.SerializeObject(PlanetsUpdate);
+            var planetsUpdate = Planets.Select(x => x.ToPlanetUpdate());
+            return JsonConvert.SerializeObject(planetsUpdate);
         }
 
         public List<PlanetUpdate> DeserializeMapUpdate(string json)
