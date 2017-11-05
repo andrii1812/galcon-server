@@ -29,5 +29,10 @@ namespace GalconServer.Core
             double y = rnd.NextDouble();
             return new Planet(id, size, population, x, y, owner);
         }
+
+        public PlanetUpdate ToPlanetUpdate()
+        {
+            return new PlanetUpdate(ID, Population, Owner);
+        }
     }
 }
