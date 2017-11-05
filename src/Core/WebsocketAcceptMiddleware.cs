@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace Galcon.Server.Core
+namespace GalconServer.Core
 {
     public class WebsocketAcceptMiddleware
     {
@@ -22,7 +22,6 @@ namespace Galcon.Server.Core
             ITaskHandler handler, 
             IOptions<Configuration> options)
         {
-            this.serializeManager = serializeManager;
             this.options = options;
             this.handler = handler;
             this.connectionManager = connectionManager;
@@ -46,7 +45,7 @@ namespace Galcon.Server.Core
                     {
                         var userName = userCollection[0];
                         var id = User.CreateId();
-                        var user = new User { Id = id, Name = userName };
+                        var user = new User(id, userName);
                         await connectionManager.Add(user, webSocket, handler, options);
                     }
                 }

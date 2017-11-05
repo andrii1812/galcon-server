@@ -1,9 +1,11 @@
-namespace Galcon.Server.Core
+using GalconServer.Model;
+
+namespace GalconServer.Core
 {
     public interface ISerializeManager
     {
-        string Serialize(Container message);
+        string Serialize(Message message);
 
-        Container Deserialize(string message);
+        Message Deserialize(string message);
     }
 }

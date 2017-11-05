@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Galcon.Server.Core
+namespace GalconServer.Core
 {
     public interface IUserManager
     {

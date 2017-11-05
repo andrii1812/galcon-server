@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GalconServer.App.Events
 {
-    using Galcon.Server.Core;
+    using GalconServer.Core;
 
     public delegate void GameOverEventHandler(GameOverEventArgs e);
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace Galcon.Server.Core
+namespace GalconServer.Core
 {
     public class ConnectionManager
     {

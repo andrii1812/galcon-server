@@ -1,14 +1,15 @@
-using Galcon.Server.Core;
+using GalconServer.Core;
+using GalconServer.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Galcon.Server.App
+namespace GalconServer.App
 {
     public class JsonSerializeManager : ISerializeManager
     {
-        public Container Deserialize(string message)
+        public Message Deserialize(string message)
         {
-            return JsonConvert.DeserializeObject<Container>(
+            return JsonConvert.DeserializeObject<Message>(
                 message, 
                 new JsonSerializerSettings 
                 { 
@@ -16,7 +17,7 @@ namespace Galcon.Server.App
                 });
         }
 
-        public string Serialize(Container message)
+        public string Serialize(Message message)
         {
             return JsonConvert.SerializeObject(
                 message, 

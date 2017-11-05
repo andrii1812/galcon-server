@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Galcon.Server.Core;
+using GalconServer.Core;
+using GalconServer.Model;
 
-namespace Galcon.Server.App
+namespace GalconServer.App
 {
     public class TaskHandler : ITaskHandler
     {
@@ -37,13 +38,7 @@ namespace Galcon.Server.App
 
         private string SerializeData(User sender, MessageType type, object data)
         {
-            var res = new Container
-            {
-                TickId = 0, // TODO: add tick Id
-                Data = data,
-                MessageType = type,
-                Sender = sender?.Id ?? -1
-            };
+            var res = new Message(0, data, type, SenderType.Server, sender?.Id ?? -1);
             return serializeManager.Serialize(res);
         }
     }
