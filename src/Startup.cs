@@ -1,6 +1,6 @@
 ﻿using System;
-using Galcon.Server.App;
-using Galcon.Server.Core;
+using GalconServer.App;
+using GalconServer.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Galcon.Server
+namespace GalconServer
 {
     public class Startup
     {

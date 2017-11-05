@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace Galcon.Server
+namespace GalconServer
 {
     public class Program
     {

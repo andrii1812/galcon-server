@@ -4,7 +4,6 @@
     using System.Timers;
     using Core;
     using Events;
-    using Galcon.Server.Core;
     using Model;
 
     public abstract class AGameManager

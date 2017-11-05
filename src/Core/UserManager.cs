@@ -1,7 +1,7 @@
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 
-namespace Galcon.Server.Core
+namespace GalconServer.Core
 {
     public class UserManager : IUserManager
     {

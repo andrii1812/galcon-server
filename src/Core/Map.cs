@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Galcon.Server.Core
+namespace GalconServer.Core
 {
     public class Map
     {
