@@ -11,6 +11,7 @@
         protected Timer _timer;
         protected double _tickInterval;
         protected int _numberOfPlanets = 20; //todo  add to constructor or read from config
+        protected int _tickId = 0;
 
         public User Player1 { get; protected set; }
         public User Player2 { get; protected set; }
@@ -32,5 +33,22 @@
         public abstract void StartGame(User player1, User player2);
         public abstract void PlayerLeft(User player);
         public abstract List<SendFleetResponse> SendFleet(List<SendFleetCommand> commands);
+
+        protected abstract void OnTick(object sender, ElapsedEventArgs e);
+
+        protected virtual void OnGameStarted(GameStartedEventArgs e)
+        {
+            GameStarted?.Invoke(e);
+        }
+
+        protected virtual void OnTickUpdated(TickUpdateEventArgs e)
+        {
+            TickUpdated?.Invoke(e);
+        }
+
+        protected virtual void OnGameOver(GameOverEventArgs e)
+        {
+            GameOver?.Invoke(e);
+        }
     }
 }
