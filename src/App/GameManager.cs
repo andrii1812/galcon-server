@@ -59,7 +59,7 @@
                 planet.IncreasePopulation();
                 planetUpdates.Add(planet.ToPlanetUpdate());
             }
-            OnTickUpdated(new TickUpdateEventArgs(TickId, planetUpdates,Flights));
+            OnTickUpdated(new TickUpdateEventArgs(TickId, planetUpdates, Flights.ToList()));
         }
 
         protected override void OnGameOver(GameOverEventArgs e)
@@ -108,7 +108,7 @@
             bool isPlayer1Alive = Map.HasPlanet(Player1.Id);
             if (isPlayer1Alive)
             {
-                bool isPlayer2Alive = Map.HasPlanet(Player1.Id);
+                bool isPlayer2Alive = Map.HasPlanet(Player2.Id);
                 if (isPlayer2Alive)
                 {
                     winner = null;
