@@ -28,6 +28,7 @@
             TickId = 0;
             Timer.Elapsed += OnTick;
             Map = new Map {Planets = Map.GenerateMap(Player1.Id, Player2.Id, NumberOfPlanets)};
+            Flights = new List<Flight>();
             OnGameStarted(new GameStartedEventArgs(TickId, new List<User> {Player1,Player2}, Map));
             Timer.Start();
         }
