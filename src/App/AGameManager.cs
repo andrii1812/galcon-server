@@ -1,6 +1,7 @@
 ﻿namespace GalconServer.App
 {
     using System.Collections.Generic;
+    using System.Threading;
     using System.Timers;
     using Core;
     using Events;
@@ -8,10 +9,12 @@
 
     public abstract class AGameManager
     {
-        protected Timer _timer;
-        protected double _tickInterval;
-        protected int _numberOfPlanets = 20; //todo  add to constructor or read from config
-        protected int _tickId = 0;
+        protected System.Timers.Timer Timer;
+        protected double TickInterval;
+        protected int NumberOfPlanets = 20; //todo  add to constructor or read from config
+        protected double DistancePerTick = 0.03;
+        protected int TickId = 0;
+        protected int LastFlightId = 0;
 
         public User Player1 { get; protected set; }
         public User Player2 { get; protected set; }
@@ -28,14 +31,25 @@
         /// <param name="tickInterval"> interval between ticks in milliseconds </param>
         protected AGameManager(double tickInterval)
         {
-            _tickInterval = tickInterval;
+            TickInterval = tickInterval;
         }
 
         public abstract void StartGame(User player1, User player2);
         public abstract void PlayerLeft(User player);
         public abstract List<SendFleetResponse> SendFleet(int senderId, List<SendFleetCommand> commands);
+        public abstract bool IsGameOver(out User winner);
 
         protected abstract void OnTick(object sender, ElapsedEventArgs e);
+
+        protected virtual int AddNewFlight(int sender, Planet from, Planet to)
+        {
+            Interlocked.Increment(ref LastFlightId);
+            int flightId = LastFlightId;
+            int distanceInTicks = (int) (Map.GetDistanceBetweenPlanets(from, to) / DistancePerTick);
+            var flight = new Flight(flightId, sender, from.ID, to.ID, from.SendFleet(), distanceInTicks);
+            Flights.Add(flight);
+            return flightId;
+        }
 
         protected virtual void OnGameStarted(GameStartedEventArgs e)
         {

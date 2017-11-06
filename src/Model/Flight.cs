@@ -25,7 +25,7 @@ namespace GalconServer.Model
             private set { _currentPosition = value; }
         }
 
-        public Flight(int id, int ownerID, int fromPlanet, int toPlanet, int population, int totalPath, int currentPosition)
+        public Flight(int id, int ownerID, int fromPlanet, int toPlanet, int population, int totalPath)
         {
             ID = id;
             OwnerID = ownerID;
@@ -33,7 +33,7 @@ namespace GalconServer.Model
             ToPlanet = toPlanet;
             Population = population;
             TotalPath = totalPath;
-            CurrentPosition = currentPosition;
+            CurrentPosition = 0;
         }
 
         public void Move()
