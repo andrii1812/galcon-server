@@ -10,7 +10,7 @@
     {
         private const double _partOfLargePlanets = 0.2;
         private const double _partOfMediumPlanets = 0.4;
-        private const double _startPopulation = 45;
+        private const int _startPopulation = 45;
         private const double _minDistance = 0.05;
         public List<Planet> Planets;
 
@@ -68,6 +68,16 @@
         {
             double distance = Math.Pow(firstPlanet.X - secondPlanet.X, 2) + Math.Pow(firstPlanet.Y - secondPlanet.Y, 2);
             return Math.Sqrt(distance);
+        }
+
+        public Planet GetPlanetById(int id)
+        {
+            return Planets.FirstOrDefault(x => x.ID == id);
+        }
+
+        public bool HasPlanet(int ownerId)
+        {
+            return Planets.Any(x => x.Owner == ownerId);
         }
 
         public string SerializeMap()
