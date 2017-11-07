@@ -9,6 +9,8 @@ namespace GalconServer.Core
         public int Id {get;set;}
         public string Name {get; set;}
 
+        public bool IsReady {get;set;} = false;
+
         public User(int id, string name)
         {
             Id = id;

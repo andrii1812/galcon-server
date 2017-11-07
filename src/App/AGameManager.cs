@@ -21,6 +21,7 @@
 
         public Map Map { get; protected set; }
         public List<Flight> Flights { get; protected set; }
+        public int TickID => TickId;
 
         public event GameStartedEEventHandler GameStarted;
         public event TickUpdateEventHandler TickUpdated;

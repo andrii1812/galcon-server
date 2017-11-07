@@ -2,9 +2,6 @@ language: csharp
 mono: none
 dotnet: 2.0.0
 dist: trusty
-branches:
-  only:
-  - master
 script:
  - dotnet restore src/
  - dotnet publish src/ -c Release -r linux-x64 -o ../publish/linux-x64

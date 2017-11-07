@@ -6,5 +6,6 @@ namespace GalconServer.Core
     {
         Task Handle(User user, string message);
         Task UserConnected(User user);
+        void UserDisconnected(User user);
     }
 }

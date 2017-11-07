@@ -19,7 +19,8 @@ namespace GalconServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ConnectionManager>();
-            services.AddTransient<ITaskHandler, TaskHandler>();
+            services.AddSingleton<ITaskHandler, TaskHandler>();
+            services.AddSingleton<AGameManager, GameManager>();
             services.Configure<Configuration>(Configuration);
             services.AddTransient<ISerializeManager, JsonSerializeManager>();
         }

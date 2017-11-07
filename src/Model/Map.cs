@@ -80,20 +80,10 @@
             return Planets.Any(x => x.Owner == ownerId);
         }
 
-        public string SerializeMap()
-        {
-            return JsonConvert.SerializeObject(Planets);
-        }
-
-        public List<Planet> DeserializeMap(string json)
-        {
-            return JsonConvert.DeserializeObject<List<Planet>>(json);
-        }
-
-        public string SerializeMapUpdate()
+        public IEnumerable<PlanetUpdate> MapUpdate()
         {
             var planetsUpdate = Planets.Select(x => x.ToPlanetUpdate());
-            return JsonConvert.SerializeObject(planetsUpdate);
+            return planetsUpdate;
         }
 
         public List<PlanetUpdate> DeserializeMapUpdate(string json)

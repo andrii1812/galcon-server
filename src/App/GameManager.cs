@@ -7,6 +7,7 @@
     using System.Timers;
     using Core;
     using Events;
+    using Microsoft.Extensions.Options;
     using Model;
 
     public class GameManager : AGameManager
@@ -15,9 +16,8 @@
         /// 
         /// </summary>
         /// <param name="tickInterval"> interval between ticks in milliseconds </param>
-        public GameManager(double tickInterval) : base(tickInterval)
+        public GameManager(IOptions<Configuration> config) : base(config.Value.TickInterval)
         {
-            TickInterval = tickInterval;
         }
 
         public override void StartGame(User player1, User player2)

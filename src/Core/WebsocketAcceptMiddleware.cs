@@ -14,7 +14,6 @@ namespace GalconServer.Core
         private readonly ConnectionManager connectionManager;
         private readonly ITaskHandler handler;
         private readonly IOptions<Configuration> options;
-        private readonly ISerializeManager serializeManager;
 
         public WebsocketAcceptMiddleware(
             RequestDelegate next, 

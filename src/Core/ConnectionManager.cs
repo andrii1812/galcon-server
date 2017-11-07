@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,10 +12,12 @@ namespace GalconServer.Core
 {
     public class ConnectionManager
     {
-        public ConcurrentDictionary<User, WebSocket> _dictionary = new ConcurrentDictionary<User, WebSocket>();
-        private readonly HttpContext context;
-        private ISerializeManager _serializeManager;
+        private ConcurrentDictionary<User, WebSocket> _dictionary = new ConcurrentDictionary<User, WebSocket>();
         private IOptions<Configuration> _options;
+
+        public IEnumerable<User> Users => _dictionary.Keys;
+
+        public bool IsUsersReady => _dictionary.Keys.Count == 2 && _dictionary.Keys.All(x => x.IsReady);
 
         internal async Task Send(User user, string message)
         {
@@ -54,6 +57,7 @@ namespace GalconServer.Core
             } 
             while (!result.CloseStatus.HasValue);
 
+            handler.UserDisconnected(user);
             await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
         }
 
