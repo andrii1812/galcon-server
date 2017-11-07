@@ -14,6 +14,7 @@ namespace GalconServer.Core
     {
         private ConcurrentDictionary<User, WebSocket> _dictionary = new ConcurrentDictionary<User, WebSocket>();
         private IOptions<Configuration> _options;
+        private ITaskHandler _handler;
 
         public IEnumerable<User> Users => _dictionary.Keys;
 
@@ -24,14 +25,14 @@ namespace GalconServer.Core
             WebSocket socket;
             while(!_dictionary.TryGetValue(user, out socket));
 
-            await Send(socket, message);
+            await Send(user, socket, message);
         }
 
         internal async Task Broadcast(string message)
         {
-            foreach(var sock in _dictionary.Values)
+            foreach(var pair in _dictionary.AsEnumerable())
             {
-                await Send(sock, message);
+                await Send(pair.Key, pair.Value, message);
             }
         }
 
@@ -44,8 +45,17 @@ namespace GalconServer.Core
             await RecieveLoop(user, webSocket, handler);
         }
 
+        internal async Task CloseAll()
+        {
+            foreach(var sock in _dictionary.Values)
+            {
+                await sock.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+            }
+        }
+
         private async Task RecieveLoop(User user, WebSocket webSocket, ITaskHandler handler)
         {
+            _handler = handler;
             var buffer = new byte[1024 * 4];
             WebSocketReceiveResult result;
             do
@@ -53,19 +63,32 @@ namespace GalconServer.Core
                 result = webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None).Result;
                 var str = System.Text.Encoding.UTF8.GetString(buffer, 0,  result.Count);
 
-                await handler.Handle(user, str);
+                await _handler.Handle(user, str);
             } 
             while (!result.CloseStatus.HasValue);
-
-            handler.UserDisconnected(user);
+            
+            _handler.UserDisconnected(user);
             await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
         }
 
-        private async Task Send(WebSocket sock, string message)
+        private async Task Send(User user, WebSocket sock, string message)
         {            
             var bytes = System.Text.Encoding.UTF8.GetBytes(message);
 
-            await sock.SendAsync(new ArraySegment<byte>(bytes, 0, bytes.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            try
+            {
+                await sock.SendAsync(new ArraySegment<byte>(bytes, 0, bytes.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+            catch(WebSocketException)
+            {
+                _handler.UserDisconnected(user);
+            }
+        }
+
+        internal void RemoveUser(User user)
+        {
+            WebSocket t;
+            while(!_dictionary.TryRemove(user, out t));
         }
     }
 }

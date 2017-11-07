@@ -33,6 +33,7 @@ namespace GalconServer.App
             var stringResponse = serializeManager.Serialize(res);
 
             await connectionManager.Broadcast(stringResponse);
+            await connectionManager.CloseAll();
         }
 
         private async void OnTickUpdated(TickUpdateEventArgs e)
@@ -103,6 +104,7 @@ namespace GalconServer.App
 
         public void UserDisconnected(User user)
         {
+            connectionManager.RemoveUser(user);
             gameManager.PlayerLeft(user);
         }
     }
