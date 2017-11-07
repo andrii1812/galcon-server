@@ -7,9 +7,9 @@ namespace GalconServer.App
 {
     public class TaskHandler : ITaskHandler
     {
-        private readonly IUserManager userManager;
+        private readonly ConnectionManager userManager;
         private readonly ISerializeManager serializeManager;
-        public TaskHandler(IUserManager userManager, ISerializeManager serializeManager)
+        public TaskHandler(ConnectionManager userManager, ISerializeManager serializeManager)
         {
             this.serializeManager = serializeManager;
             this.userManager = userManager;
@@ -33,7 +33,7 @@ namespace GalconServer.App
             var data = new { PlayerId = user.Id };
             var response = SerializeData(user, MessageType.ConnectionResponse, data);
 
-            await userManager.SendMessage(user, response);
+            await userManager.Send(user, response);
         }
 
         private string SerializeData(User sender, MessageType type, object data)

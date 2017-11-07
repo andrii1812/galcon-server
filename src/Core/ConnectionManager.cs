@@ -47,7 +47,7 @@ namespace GalconServer.Core
             WebSocketReceiveResult result;
             do
             {
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+                result = webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None).Result;
                 var str = System.Text.Encoding.UTF8.GetString(buffer, 0,  result.Count);
 
                 await handler.Handle(user, str);
