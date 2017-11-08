@@ -105,7 +105,11 @@ namespace GalconServer.App
         public void UserDisconnected(User user)
         {
             _connectionManager.RemoveUser(user);
-            _gameManager.PlayerLeft(user);
+            
+            if(!_gameManager.IsGameEnded)
+            {
+                _gameManager.PlayerLeft(user);
+            }
         }
     }
 }

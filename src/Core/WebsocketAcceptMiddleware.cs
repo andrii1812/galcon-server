@@ -24,6 +24,7 @@ namespace GalconServer.Core
             this.options = options;
             this.handler = handler;
             this.connectionManager = connectionManager;
+            connectionManager.RegisterHandler(handler);            
             _next = next;
         }
 
@@ -34,7 +35,6 @@ namespace GalconServer.Core
                 if (context.WebSockets.IsWebSocketRequest)
                 {
                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-
                     var userCollection = context.Request.Query["name"];
                     if (userCollection.Count != 1)
                     {
@@ -45,7 +45,7 @@ namespace GalconServer.Core
                         var userName = userCollection[0];
                         var id = User.CreateId();
                         var user = new User(id, userName);
-                        await connectionManager.Add(user, webSocket, handler, options);
+                        await connectionManager.Add(user, webSocket);
                     }
                 }
                 else

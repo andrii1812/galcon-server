@@ -23,6 +23,7 @@
         public Map Map { get; protected set; }
         public List<Flight> Flights { get; protected set; }
         public int TickID => TickId;
+        public bool IsGameEnded => Player1 == null && Player2 == null;
 
         public event GameStartedEEventHandler GameStarted;
         public event TickUpdateEventHandler TickUpdated;
@@ -47,7 +48,6 @@
         public abstract void StartGame(User player1, User player2);
         public abstract void PlayerLeft(User player);
         public abstract List<SendFleetResponse> SendFleet(int senderId, List<SendFleetCommand> commands);
-        public abstract bool IsGameOver(out User winner);
 
         protected abstract void OnTick(object sender, ElapsedEventArgs e);
 

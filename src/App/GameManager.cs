@@ -99,7 +99,7 @@
             return result;
         }
 
-        public override bool IsGameOver(out User winner)
+        private bool IsGameOver(out User winner)
         {
             bool isPlayer1Alive = Map.HasPlanets(Player1.Id);
             if (isPlayer1Alive)

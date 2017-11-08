@@ -6,6 +6,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace GalconServer.Core
@@ -14,11 +15,18 @@ namespace GalconServer.Core
     {
         private ConcurrentDictionary<User, WebSocket> _dictionary = new ConcurrentDictionary<User, WebSocket>();
         private IOptions<Configuration> _options;
+        private readonly ILogger<ConnectionManager> _logger;
         private ITaskHandler _handler;
 
         public IEnumerable<User> Users => _dictionary.Keys;
 
         public bool IsUsersReady => _dictionary.Keys.Count == 2 && _dictionary.Keys.All(x => x.IsReady);
+
+        public ConnectionManager(IOptions<Configuration> options, ILogger<ConnectionManager> logger)
+        {
+            _options = options;
+            _logger = logger;
+        }
 
         internal async Task Send(User user, string message)
         {
@@ -26,6 +34,11 @@ namespace GalconServer.Core
             while(!_dictionary.TryGetValue(user, out socket));
 
             await Send(user, socket, message);
+        }
+
+        internal void RegisterHandler(ITaskHandler handler)
+        {
+            _handler = handler;
         }
 
         internal async Task Broadcast(string message)
@@ -36,26 +49,36 @@ namespace GalconServer.Core
             }
         }
 
-        internal async Task Add(User user, WebSocket webSocket, ITaskHandler handler, IOptions<Configuration> options)
+        internal async Task Add(User user, WebSocket webSocket)
         {
-            _options = options;
             while(!_dictionary.TryAdd(user, webSocket));
-            await handler.UserConnected(user);
+            await _handler.UserConnected(user);
 
-            await ReceiveLoop(user, webSocket, handler);
+            await ReceiveLoop(user, webSocket);
         }
 
         internal async Task CloseAll()
         {
             foreach(var sock in _dictionary.Values)
             {
-                await sock.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+                await TryClose(sock);
             }
         }
 
-        private async Task ReceiveLoop(User user, WebSocket webSocket, ITaskHandler handler)
+        private async Task TryClose(WebSocket sock)
         {
-            _handler = handler;
+            try
+            {
+                await sock.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(0, ex, "Exception occured while closing socket");
+            }
+        }
+
+        private async Task ReceiveLoop(User user, WebSocket webSocket)
+        {
             var buffer = new byte[1024 * 4];
             WebSocketReceiveResult result;
             do
@@ -78,10 +101,15 @@ namespace GalconServer.Core
             try
             {
                 await sock.SendAsync(new ArraySegment<byte>(bytes, 0, bytes.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-            }
-            catch(WebSocketException)
+            } 
+            catch(Exception ex)
             {
-                _handler.UserDisconnected(user);
+                if(ex is InvalidOperationException || ex is WebSocketException)
+                {
+                    _handler.UserDisconnected(user);
+                }
+                _logger.LogError(0, ex, "Unknown exception occured while sending on socket");
+                throw;
             }
         }
 
