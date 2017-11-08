@@ -33,7 +33,7 @@
         public static Planet GenerateRandomPlanet(int id, Size size, int owner)
         {
             var rnd = new Random(DateTime.Now.Millisecond);
-            int population = rnd.Next(0, 100);
+            int population = rnd.Next(0, Map.MaxPlanetStartPopulation);
             double x = rnd.NextDouble();
             double y = rnd.NextDouble();
             return new Planet(id, size, population, x, y, owner);
@@ -50,7 +50,7 @@
             {
                 return;
             }
-            double addend = (double) Size / 4; // todo move this to const/constructor/config
+            double addend = (int)Size * Map.PopulationGrowthCoefficient;
             Interlocked.Exchange(ref _population, _population + addend);
         }
 
@@ -77,7 +77,7 @@
 
         public int SendFleet()
         {
-            int toSend = Population / 2;
+            int toSend = (int)(Population * Map.PartOfPopulationToSend);
             Interlocked.Exchange(ref _population, _population - toSend);
             return toSend;
         }

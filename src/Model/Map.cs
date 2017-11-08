@@ -4,15 +4,31 @@
     using System.Collections.Generic;
     using System.Linq;
     using Core;
+    using Microsoft.Extensions.Options;
     using Newtonsoft.Json;
 
     public class Map
     {
-        private const double _partOfLargePlanets = 0.2;
-        private const double _partOfMediumPlanets = 0.4;
-        private const int _startPopulation = 45;
-        private const double _minDistance = 0.05;
+        public static double PartOfLargePlanets { get; private set; } = 0.2;
+        public static double PartOfMediumPlanets { get; private set; } = 0.4;
+        public static int PlayerStartPopulation { get; private set; } = 45;
+        public static int MaxPlanetStartPopulation { get; private set; } = 40;
+        public static double MinDistanceBetweenPlanets { get; private set; } = 0.05;
+        public static double PartOfPopulationToSend { get; private set; } = 0.5;
+        public static double PopulationGrowthCoefficient { get; private set; } = 0.25;
+        
         public List<Planet> Planets;
+
+        public static void Initialize(IOptions<Configuration> config)
+        {
+            PartOfLargePlanets = config.Value.PartOfLargePlanets;
+            PartOfMediumPlanets = config.Value.PartOfMediumPlanets;
+            PlayerStartPopulation = config.Value.PlayerStartPopulation;
+            MinDistanceBetweenPlanets = config.Value.MinDistanceBetweenPlanets;
+            PartOfPopulationToSend = config.Value.PartOfPopulationToSend;
+            PopulationGrowthCoefficient = config.Value.PopulationGrowthCoefficient;
+            MaxPlanetStartPopulation = config.Value.MaxPlanetStartPopulation;
+        }
 
         public static List<Planet> GenerateMap(int firstUserID, int secndUserID, int numberOfPlanets)
         {
@@ -20,11 +36,11 @@
 
             bool IsDistanceLongEnough(Planet planet, List<Planet> pList)
             {
-                return pList.Select(p => GetDistanceBetweenPlanets(p, planet)).All(distance => !(distance < _minDistance));
+                return pList.Select(p => GetDistanceBetweenPlanets(p, planet)).All(distance => !(distance < MinDistanceBetweenPlanets));
             }
 
             Planet firstUserPlanet = Planet.GenerateRandomPlanet(1, Size.Huge, firstUserID);
-            firstUserPlanet.Population = _startPopulation;
+            firstUserPlanet.Population = PlayerStartPopulation;
             planetList.Add(firstUserPlanet);
             Planet secondUserPlanet;
             while (true)
@@ -36,10 +52,10 @@
                     break;
                 }
             }
-            secondUserPlanet.Population = _startPopulation;
+            secondUserPlanet.Population = PlayerStartPopulation;
 
-            int l = (int)(_partOfLargePlanets * numberOfPlanets);
-            int m = (int)(_partOfMediumPlanets * numberOfPlanets);
+            int l = (int)(PartOfLargePlanets * numberOfPlanets);
+            int m = (int)(PartOfMediumPlanets * numberOfPlanets);
             for (int i = 3; i <= numberOfPlanets; i++)
             {
                 Size size;
@@ -75,7 +91,7 @@
             return Planets.FirstOrDefault(x => x.ID == id);
         }
 
-        public bool HasPlanet(int ownerId)
+        public bool HasPlanets(int ownerId)
         {
             return Planets.Any(x => x.Owner == ownerId);
         }

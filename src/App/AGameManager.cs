@@ -5,14 +5,15 @@
     using System.Timers;
     using Core;
     using Events;
+    using Microsoft.Extensions.Options;
     using Model;
 
     public abstract class AGameManager
     {
         protected System.Timers.Timer Timer;
         protected double TickInterval;
-        protected int NumberOfPlanets = 20; //todo  add to constructor or read from config
-        protected double DistancePerTick = 0.03;
+        protected int NumberOfPlanets = 20;
+        protected double FleetSpeed = 0.03;
         protected int TickId = 0;
         protected int LastFlightId = 0;
 
@@ -26,6 +27,14 @@
         public event GameStartedEEventHandler GameStarted;
         public event TickUpdateEventHandler TickUpdated;
         public event GameOverEventHandler GameOver;
+
+        protected AGameManager(IOptions<Configuration> config) : this(config.Value.TickInterval)
+        {
+            NumberOfPlanets = config.Value.NumberOfPlanets;
+            FleetSpeed = config.Value.FleetSpeed;
+            Map.Initialize(config);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -46,7 +55,7 @@
         {
             Interlocked.Increment(ref LastFlightId);
             int flightId = LastFlightId;
-            int distanceInTicks = (int) (Map.GetDistanceBetweenPlanets(from, to) / DistancePerTick);
+            int distanceInTicks = (int) (Map.GetDistanceBetweenPlanets(from, to) / FleetSpeed);
             var flight = new Flight(flightId, sender, from.ID, to.ID, from.SendFleet(), distanceInTicks);
             Flights.Add(flight);
             return flightId;

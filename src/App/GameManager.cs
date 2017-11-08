@@ -12,11 +12,7 @@
 
     public class GameManager : AGameManager
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tickInterval"> interval between ticks in milliseconds </param>
-        public GameManager(IOptions<Configuration> config) : base(config.Value.TickInterval)
+        public GameManager(IOptions<Configuration> config) : base(config)
         {
         }
 
@@ -105,10 +101,10 @@
 
         public override bool IsGameOver(out User winner)
         {
-            bool isPlayer1Alive = Map.HasPlanet(Player1.Id);
+            bool isPlayer1Alive = Map.HasPlanets(Player1.Id);
             if (isPlayer1Alive)
             {
-                bool isPlayer2Alive = Map.HasPlanet(Player2.Id);
+                bool isPlayer2Alive = Map.HasPlanets(Player2.Id);
                 if (isPlayer2Alive)
                 {
                     winner = null;
