@@ -42,7 +42,7 @@ namespace GalconServer.Core
             while(!_dictionary.TryAdd(user, webSocket));
             await handler.UserConnected(user);
 
-            await RecieveLoop(user, webSocket, handler);
+            await ReceiveLoop(user, webSocket, handler);
         }
 
         internal async Task CloseAll()
@@ -53,7 +53,7 @@ namespace GalconServer.Core
             }
         }
 
-        private async Task RecieveLoop(User user, WebSocket webSocket, ITaskHandler handler)
+        private async Task ReceiveLoop(User user, WebSocket webSocket, ITaskHandler handler)
         {
             _handler = handler;
             var buffer = new byte[1024 * 4];

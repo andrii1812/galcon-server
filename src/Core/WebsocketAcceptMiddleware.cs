@@ -54,7 +54,7 @@ namespace GalconServer.Core
                 }
             }
 
-            await this._next(context);
+            await _next(context);
         }
     }
 }
