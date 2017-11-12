@@ -75,7 +75,13 @@
                 if (IsDistanceLongEnough(planet, planetList))
                     planetList.Add(planet);
                 else
+                {
+                    if (size == Size.Large)
+                        l++;
+                    else if (size == Size.Medium)
+                        m++;
                     i--;
+                }
             }
             return planetList;
         }
