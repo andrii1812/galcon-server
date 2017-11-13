@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 
 namespace GalconServer.Core
 {
@@ -6,9 +7,11 @@ namespace GalconServer.Core
     {
         private static int IdSource = 0;
 
+        [JsonProperty("playerId")]
         public int Id {get;set;}
         public string Name {get; set;}
 
+        [JsonIgnore]
         public bool IsReady {get;set;} = false;
 
         public User(int id, string name)
