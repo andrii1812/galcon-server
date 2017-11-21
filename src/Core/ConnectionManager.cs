@@ -86,7 +86,10 @@ namespace GalconServer.Core
                 result = webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None).Result;
                 var str = System.Text.Encoding.UTF8.GetString(buffer, 0,  result.Count);
 
-                await _handler.Handle(user, str);
+                if(!result.CloseStatus.HasValue) 
+                {
+                    await _handler.Handle(user, str);
+                }
             } 
             while (!result.CloseStatus.HasValue);
             

@@ -47,6 +47,7 @@ namespace GalconServer.Core
                         var user = new User(id, userName);
                         await connectionManager.Add(user, webSocket);
                     }
+                    return;
                 }
                 else
                 {

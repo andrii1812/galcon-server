@@ -59,14 +59,14 @@
         }
 
         protected override void OnGameOver(GameOverEventArgs e)
-        {
-            base.OnGameOver(e);
+        {            
             Timer.Stop();
             Timer.Elapsed -= OnTick;
             Timer = null;
             Player1 = null;
             Player2 = null;
             Map = null;
+            base.OnGameOver(e);
         }
 
         public override void PlayerLeft(User player)
