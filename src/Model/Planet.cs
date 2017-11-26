@@ -30,9 +30,8 @@
             Owner = owner;
         }
 
-        public static Planet GenerateRandomPlanet(int id, Size size, int owner)
+        public static Planet GenerateRandomPlanet(int id, Size size, int owner, Random rnd)
         {
-            var rnd = new Random(DateTime.Now.Millisecond);
             int population = rnd.Next(0, Map.MaxPlanetStartPopulation);
             double x = rnd.NextDouble();
             double y = rnd.NextDouble();

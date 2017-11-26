@@ -13,11 +13,12 @@
         public static double PartOfMediumPlanets { get; private set; } = 0.4;
         public static int PlayerStartPopulation { get; private set; } = 45;
         public static int MaxPlanetStartPopulation { get; private set; } = 40;
-        public static double MinDistanceBetweenPlanets { get; private set; } = 0.05;
+        public static double MinDistanceBetweenPlanets { get; private set; } = 1;
         public static double PartOfPopulationToSend { get; private set; } = 0.5;
         public static double PopulationGrowthCoefficient { get; private set; } = 0.25;
         
         public List<Planet> Planets;
+        private static Random rnd;
 
         public static void Initialize(IOptions<Configuration> config)
         {
@@ -33,19 +34,20 @@
         public static List<Planet> GenerateMap(int firstUserID, int secndUserID, int numberOfPlanets)
         {
             var planetList = new List<Planet>();
+            rnd = new Random(DateTime.Now.Millisecond);
 
             bool IsDistanceLongEnough(Planet planet, List<Planet> pList)
             {
                 return pList.Select(p => GetDistanceBetweenPlanets(p, planet)).All(distance => !(distance < MinDistanceBetweenPlanets));
             }
 
-            Planet firstUserPlanet = Planet.GenerateRandomPlanet(1, Size.Huge, firstUserID);
+            Planet firstUserPlanet = Planet.GenerateRandomPlanet(1, Size.Huge, firstUserID, rnd);
             firstUserPlanet.Population = PlayerStartPopulation;
             planetList.Add(firstUserPlanet);
             Planet secondUserPlanet;
             while (true)
             {
-                secondUserPlanet = Planet.GenerateRandomPlanet(2, Size.Huge, secndUserID);
+                secondUserPlanet = Planet.GenerateRandomPlanet(2, Size.Huge, secndUserID, rnd);
                 if (IsDistanceLongEnough(secondUserPlanet, planetList))
                 {
                     planetList.Add(secondUserPlanet);
@@ -71,7 +73,7 @@
                 }
                 else
                     size = Size.Small;
-                Planet planet = Planet.GenerateRandomPlanet(i, size, -1);
+                Planet planet = Planet.GenerateRandomPlanet(i, size, -1, rnd);
                 if (IsDistanceLongEnough(planet, planetList))
                     planetList.Add(planet);
                 else
