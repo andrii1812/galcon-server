@@ -80,20 +80,23 @@
             var result = new List<SendFleetResponse>();
             foreach (var command in commands)
             {
-                var planetFrom = Map.GetPlanetById(command.From);
-                if (planetFrom.Owner != senderId)
+                foreach (var fromPlanetId in command.From)
                 {
-                    result.Add(new SendFleetResponse(-1, ErrorCodes.DoesntOwnFromPlanet));
-                }
-                else if (planetFrom.Population <= 1)
-                {
-                    result.Add(new SendFleetResponse(-1, ErrorCodes.NotEnoughPopulation));
-                }
-                else
-                {
-                    var planetTo = Map.GetPlanetById(command.To);
-                    int flightId = AddNewFlight(senderId, planetFrom, planetTo);
-                    result.Add(new SendFleetResponse(flightId));
+                    var planetFrom = Map.GetPlanetById(fromPlanetId);
+                    if (planetFrom.Owner != senderId)
+                    {
+                        result.Add(new SendFleetResponse(-1, ErrorCodes.DoesntOwnFromPlanet));
+                    }
+                    else if (planetFrom.Population <= 1)
+                    {
+                        result.Add(new SendFleetResponse(-1, ErrorCodes.NotEnoughPopulation));
+                    }
+                    else
+                    {
+                        var planetTo = Map.GetPlanetById(command.To);
+                        int flightId = AddNewFlight(senderId, planetFrom, planetTo);
+                        result.Add(new SendFleetResponse(flightId));
+                    }
                 }
             }
             return result;
