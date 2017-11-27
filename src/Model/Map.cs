@@ -9,13 +9,13 @@
 
     public class Map
     {
-        public static double PartOfLargePlanets { get; private set; } = 0.2;
-        public static double PartOfMediumPlanets { get; private set; } = 0.4;
-        public static int PlayerStartPopulation { get; private set; } = 45;
-        public static int MaxPlanetStartPopulation { get; private set; } = 40;
-        public static double MinDistanceBetweenPlanets { get; private set; } = 1;
-        public static double PartOfPopulationToSend { get; private set; } = 0.5;
-        public static double PopulationGrowthCoefficient { get; private set; } = 0.25;
+        public static double PartOfLargePlanets { get; private set; }
+        public static double PartOfMediumPlanets { get; private set; } 
+        public static int PlayerStartPopulation { get; private set; } 
+        public static int MaxPlanetStartPopulation { get; private set; } 
+        public static double MinDistanceBetweenPlanets { get; private set; }
+        public static double PartOfPopulationToSend { get; private set; }
+        public static double PopulationGrowthCoefficient { get; private set; }
         
         public List<Planet> Planets;
         private static Random rnd;

@@ -12,8 +12,8 @@
     {
         protected System.Timers.Timer Timer;
         protected double TickInterval;
-        protected int NumberOfPlanets = 20;
-        protected double FleetSpeed = 0.03;
+        protected int NumberOfPlanets;
+        protected double FleetSpeed;
         protected int TickId = 0;
         protected int LastFlightId = 0;
 

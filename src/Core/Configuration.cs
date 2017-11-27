@@ -2,31 +2,28 @@ namespace GalconServer.Core
 {
     public class Configuration
     {
-        public string Host {get; set;}
+        public string Host {get; set;} = "0.0.0.0";
 
-        public string Port {get;set;}
+        public string Port {get;set;} = "5050";
 
-        public int TickInterval { get; set; }
+        public int TickInterval { get; set; } = 1000;
 
-        public int NumberOfPlanets { get; set; }
+        public int NumberOfPlanets { get; set; }  = 20;
 
-        /// <summary>
-        /// todo
-        /// </summary>
-        public double FleetSpeed { get; set; }
+        public double FleetSpeed { get; set; } = 0.03;
 
-        public double PartOfLargePlanets { get; set; }
+        public double PartOfLargePlanets { get; set; } = 0.2;
 
-        public double PartOfMediumPlanets { get; set; }
+        public double PartOfMediumPlanets { get; set; } = 0.4;
 
-        public int PlayerStartPopulation { get; set; }
+        public int PlayerStartPopulation { get; set; } = 45;
 
-        public int MaxPlanetStartPopulation { get; set; }
+        public int MaxPlanetStartPopulation { get; set; } = 40;
 
-        public double MinDistanceBetweenPlanets { get; set; }
+        public double MinDistanceBetweenPlanets { get; set; } = 1;
 
-        public double PartOfPopulationToSend { get; set; }
+        public double PartOfPopulationToSend { get; set; } = 0.5;
 
-        public double PopulationGrowthCoefficient { get; set; }
+        public double PopulationGrowthCoefficient { get; set; } = 0.25;
     }
 }
