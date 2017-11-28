@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GalconServer.App.Events;
 using GalconServer.Core;
 using GalconServer.Model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace GalconServer.App
@@ -56,9 +57,17 @@ namespace GalconServer.App
 
         public async Task Handle(User user, string message)
         {
-            var container = _serializeManager.Deserialize(message);
+            Message container;
+            try
+            {
+                container = _serializeManager.Deserialize(message);
+            }
+            catch (JsonSerializationException e)
+            {
+                await SendError(user, e, "Invalid JSON provided");
+                return;
+            }
 
-            //here go deciding how to handle each request
             switch (container.MessageType)
             {
                 case MessageType.StartGame:
@@ -71,15 +80,29 @@ namespace GalconServer.App
                     }     
                     break;
                 case MessageType.SendFleet:
-                    var data = (container.Data as JToken).ToObject<List<SendFleetCommand>>();
+                    List<SendFleetCommand> data;
+                    try 
+                    {                   
+                        data = (container.Data as JToken).ToObject<List<SendFleetCommand>>();
+                    }
+                    catch(JsonSerializationException e)
+                    {
+                        await SendError(user, e, "Invalid 'data' field in message");
+                        return;
+                    }
 
                     var result = _gameManager.SendFleet(user.Id, data);
-
-                    var res = new Message(_gameManager.TickID, result, MessageType.SendFleetResponse, SenderType.Server, -1);
-                    var response = _serializeManager.Serialize(res);
+                    var response = SerializeData(user, MessageType.ErrorResponse, result);
                     await _connectionManager.Send(user, response);
                     break;
             }
+        }
+
+        private async Task SendError(User user, Exception e, string message)
+        {
+            var res = new ErrorResponse(e, message);
+            var str = SerializeData(user, MessageType.ErrorResponse, res);
+            await _connectionManager.Send(user, str);
         }
 
         public async Task UserConnected(User user)

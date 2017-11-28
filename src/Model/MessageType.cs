@@ -8,6 +8,7 @@
         TickUpdate,
         SendFleet,
         SendFleetResponse,
-        EndGame
+        EndGame,
+        ErrorResponse
     }
 }
