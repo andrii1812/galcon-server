@@ -110,6 +110,7 @@ namespace GalconServer.Core
                 if(ex is InvalidOperationException || ex is WebSocketException)
                 {
                     _handler.UserDisconnected(user);
+                    return;
                 }
                 _logger.LogError(0, ex, "Unknown exception occured while sending on socket");
                 throw;
