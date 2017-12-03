@@ -123,6 +123,7 @@ namespace GalconServer.App
         {
             _gameManager.GameStarted -= OnGameStarted;
             _gameManager.TickUpdated -= OnTickUpdated;
+            _gameManager.GameOver -= OnGameOver;
         }
 
         public void UserDisconnected(User user)

@@ -28,7 +28,7 @@ namespace GalconServer.Core
             _logger = logger;
         }
 
-        internal async Task Send(User user, string message)
+        public async Task Send(User user, string message)
         {
             WebSocket socket;
             while(!_dictionary.TryGetValue(user, out socket));
@@ -36,12 +36,12 @@ namespace GalconServer.Core
             await Send(user, socket, message);
         }
 
-        internal void RegisterHandler(ITaskHandler handler)
+        public void RegisterHandler(ITaskHandler handler)
         {
             _handler = handler;
         }
 
-        internal async Task Broadcast(string message)
+        public async Task Broadcast(string message)
         {
             foreach(var pair in _dictionary.AsEnumerable())
             {
@@ -49,7 +49,7 @@ namespace GalconServer.Core
             }
         }
 
-        internal async Task Add(User user, WebSocket webSocket)
+        public async Task Add(User user, WebSocket webSocket)
         {
             while(!_dictionary.TryAdd(user, webSocket));
             await _handler.UserConnected(user);
@@ -57,7 +57,7 @@ namespace GalconServer.Core
             await ReceiveLoop(user, webSocket);
         }
 
-        internal async Task CloseAll()
+        public async Task CloseAll()
         {
             foreach(var sock in _dictionary.Values)
             {
@@ -117,7 +117,7 @@ namespace GalconServer.Core
             }
         }
 
-        internal void RemoveUser(User user)
+        public void RemoveUser(User user)
         {
             WebSocket t;
             while(!_dictionary.TryRemove(user, out t));
