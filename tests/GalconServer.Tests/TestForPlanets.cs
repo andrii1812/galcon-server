@@ -3,7 +3,6 @@ using GalconServer.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
-using System.Threading;
 
 namespace GalconServer.Tests
 {
