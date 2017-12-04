@@ -73,7 +73,7 @@ namespace GalconServer.Core
             }
             catch (Exception ex)
             {
-                _logger.LogError(0, ex, "Exception occured while closing socket");
+                _logger.LogError(0, ex, "Exception occurred while closing socket");
             }
         }
 
@@ -112,7 +112,7 @@ namespace GalconServer.Core
                     _handler.UserDisconnected(user);
                     return;
                 }
-                _logger.LogError(0, ex, "Unknown exception occured while sending on socket");
+                _logger.LogError(0, ex, "Unknown exception occurred while sending on socket");
                 throw;
             }
         }
