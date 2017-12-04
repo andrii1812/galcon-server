@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
-using GalconServer.Model;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using System;
-
-namespace GalconServer.Tests
+﻿namespace GalconServer.Tests.Model
 {
+    using System;
+    using FluentAssertions;
+    using GalconServer.Model;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using NSubstitute;
+
     [TestClass]
     public class TestForPlanets
     {

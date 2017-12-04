@@ -20,7 +20,7 @@ namespace GalconServer.Core
 
         public int MaxPlanetStartPopulation { get; set; } = 40;
 
-        public double MinDistanceBetweenPlanets { get; set; } = 1;
+        public double MinDistanceBetweenPlanets { get; set; } = 0.05;
 
         public double PartOfPopulationToSend { get; set; } = 0.5;
 

@@ -1,15 +1,11 @@
-﻿using FluentAssertions;
-using FluentAssertions.Common;
-using GalconServer.Model;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace GalconServer.Tests
+﻿namespace GalconServer.Tests.Model
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using FluentAssertions;
+    using GalconServer.Model;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     [TestClass]
     public class TestForMap
     {

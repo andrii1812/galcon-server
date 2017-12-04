@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading;
     using System.Timers;
@@ -18,8 +19,12 @@
 
         public override void StartGame(User player1, User player2)
         {
-            Player1 = player1;
-            Player2 = player2;
+            Player1 = player1 ?? throw new ArgumentNullException($"{nameof(player1)}can't be null");
+            Player2 = player2 ?? throw new ArgumentNullException($"{nameof(player2)}can't be null");
+            if (Player1.Equals(Player2))
+            {
+                throw new ArgumentException("users can't be equal");
+            }
             Timer = new System.Timers.Timer(TickInterval);
             TickId = 0;
             Timer.Elapsed += OnTick;
@@ -71,12 +76,25 @@
 
         public override void PlayerLeft(User player)
         {
+            if (player == null)
+            {
+                throw new ArgumentNullException($"{nameof(player)} can't be null");
+            }
+            if ( !(player.Equals(Player1) || player.Equals(Player2)))
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(player)} with id {player.Id} isn't participating in this game");
+            }
+
             var winner = Player1.Equals(player) ? Player2 : Player1;
             OnGameOver(new GameOverEventArgs(TickId, winner, $"{player.Name} has left"));
         }
 
         public override List<SendFleetResponse> SendFleet(int senderId, List<SendFleetCommand> commands)
         {
+            if (senderId != Player1.Id && senderId != Player2.Id)
+            {
+                throw new ArgumentOutOfRangeException($"Unknown {nameof(senderId)} = {senderId}");
+            }
             var result = new List<SendFleetResponse>();
             foreach (var command in commands)
             {

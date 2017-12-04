@@ -22,11 +22,8 @@ namespace GalconServer.Model
         public int TotalPath { get; private set; }
         public int CurrentPosition
         {
-            get
-            {
-                return _currentPosition;
-            }
-            private set { _currentPosition = value; }
+            get => _currentPosition;
+            private set => _currentPosition = value;
         }
 
         public Flight(int id, int ownerID, int fromPlanet, int toPlanet, int population, int totalPath)
